@@ -1,0 +1,24 @@
+[
+  {
+    "text": "readings today",
+    "expected": "2h",
+    "start": "9pm",
+    "finish": "11pm",
+    "deadline": "2026-11-13",
+    "notes": "https://arxiv.org/pdf/2611.15872, https://arxiv.org/pdf/2611.14597, https://arxiv.org/pdf/2611.14609, https://arxiv.org/pdf/2611.14615, https://arxiv.org/pdf/2611.14633, https://arxiv.org/pdf/2611.16428, https://arxiv.org/pdf/2611.17166 and https://www.nature.com/articles/s41567-022-01889-1"
+  },
+  {
+    "text": "Finish leftover project on orientation of molecules",
+    "expected": "2h + 2h + 5h",
+    "start": "",
+    "finish": "",
+    "notes": "read the notes, do the integral, write it down"
+  },
+  {
+    "text": "Groceries",
+    "expected": "1h",
+    "start": "",
+    "finish": "",
+    "notes": "Greek yogurt, milk, blueberry, grapes"
+  }
+]

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #000000;
+      --card-bg: #121212;
+      --border: #242424;
+      --text: #ffffff;
+      --muted: #757575;
+      --accent: #388bfd;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --card-bg: #f6f7f9;
+      --border: #d8dce2;
+      --text: #111418;
+      --muted: #5c6570;
+      --accent: #0969da;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 2.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .header-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    #last-updated {
+      font-size: 1.1rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-moon {
+      display: none;
+    }
+
+    html[data-theme="light"] .icon-sun {
+      display: none;
+    }
+
+    html[data-theme="light"] .icon-moon {
+      display: block;
+    }
+
+    .font-size-controls {
+      display: inline-flex;
+      align-items: stretch;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background-color: var(--card-bg);
+      overflow: hidden;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .font-size-controls:hover {
+      border-color: var(--accent);
+    }
+
+    .font-size-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .font-size-btn + .font-size-btn {
+      border-left: 1px solid var(--border);
+    }
+
+    .font-size-btn:hover:not(:disabled) {
+      color: var(--accent);
+    }
+
+    .font-size-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    .font-size-btn:disabled {
+      color: var(--muted);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    #task-list {
+      list-style: none;
+      columns: 22rem 3;
+      column-gap: 1.1rem;
+    }
+
+    .task-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.75rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .task-bullet {
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.55rem;
+    }
+
+    .task-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+
+    .task-title {
+      font-size: 1.6rem;
+      line-height: 1.4;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 1.5rem;
+      font-size: 1.05rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .task-meta-item {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .meta-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-value {
+      color: var(--text);
+    }
+
+    .task-notes {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: var(--muted);
+      white-space: pre-line;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      border-left: 2px solid var(--border);
+      padding-left: 0.75rem;
+    }
+
+    .view-controls {
+      display: inline-flex;
+      padding: 4px;
+      gap: 4px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card-bg);
+    }
+
+    .view-button {
+      min-height: 36px;
+      padding: 0.4rem 0.9rem;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .view-button[aria-pressed="true"] {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .view-button:focus-visible,
+    .task-summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .task-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    #task-list[data-view="list"] {
+      columns: 26rem 3;
+      width: 100%;
+    }
+
+    #task-list[data-view="list"] .task-item {
+      display: block;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .task-summary {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      width: 100%;
+      min-height: 6rem;
+      padding: 1.5rem 1.75rem;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .task-summary:hover {
+      background: var(--border);
+    }
+
+    .task-summary:focus-visible {
+      outline-offset: -4px;
+    }
+
+    .task-summary .task-bullet {
+      margin-top: 0;
+    }
+
+    .task-summary .task-title {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-chevron {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+      margin: 0 0.25rem 0.3rem;
+    }
+
+    .task-summary[aria-expanded="true"] .task-chevron {
+      transform: rotate(225deg);
+      margin-bottom: -0.3rem;
+    }
+
+    #task-list[data-view="list"] .task-details {
+      margin: 0 1.75rem 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .task-details[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 1.25rem; }
+      .header-right { justify-content: flex-start; }
+      .task-summary { padding: 1.25rem; gap: 0.9rem; }
+      #task-list[data-view="list"] .task-details { margin: 0 1.25rem 1.25rem; }
+    }
+  </style>
+  <script>
+    // Apply the saved theme and text size before the page paints to avoid a flash.
+    try {
+      if (localStorage.getItem("dashboard-theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+
+      var savedFontSize = parseInt(localStorage.getItem("dashboard-font-size"), 10);
+      if (!isNaN(savedFontSize)) {
+        savedFontSize = Math.min(32, Math.max(10, savedFontSize));
+        document.documentElement.style.fontSize = savedFontSize + "px";
+      }
+    } catch (e) {
+      // localStorage may be unavailable in some WebView configurations.
+    }
+  </script>
+</head>
+<body>
+
+  <header>
+    <h1>Todo list</h1>
+    <div class="header-right">
+      <div id="last-updated">Connecting...</div>
+      <div class="view-controls" role="group" aria-label="Task view">
+        <button class="view-button" id="view-cards" type="button" aria-pressed="true">Cards</button>
+        <button class="view-button" id="view-list" type="button" aria-pressed="false">List</button>
+      </div>
+      <div class="font-size-controls" role="group" aria-label="Text size">
+        <button id="font-decrease" class="font-size-btn" type="button"
+                aria-label="Decrease text size" title="Decrease text size">A&minus;</button>
+        <button id="font-increase" class="font-size-btn" type="button"
+                aria-label="Increase text size" title="Increase text size">A+</button>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" type="button"
+              aria-label="Switch to light mode" title="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <ul id="task-list"></ul>
+
+  <script>
+    const REFRESH_INTERVAL_MS = 120000; // Poll every 120 seconds
+    const THEME_KEY = "dashboard-theme";
+    const FONT_SIZE_KEY = "dashboard-font-size";
+    const VIEW_KEY = "dashboard-view";
+    let currentView = "cards";
+    let loadedTasks = [];
+    let lastTaskData = null;
+    const expandedTasks = new Set();
+    try {
+      if (localStorage.getItem(VIEW_KEY) === "list") currentView = "list";
+    } catch (e) {
+      // Use cards when storage is unavailable.
+    }
+    const MIN_FONT_SIZE = 10;
+    const MAX_FONT_SIZE = 32;
+    const FONT_SIZE_STEP = 2;
+    const DEFAULT_FONT_SIZE = 16;
+    const themeToggle = document.getElementById("theme-toggle");
+    const fontDecrease = document.getElementById("font-decrease");
+    const fontIncrease = document.getElementById("font-increase");
+
+    function getTheme() {
+      return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    }
+
+    function applyTheme(theme) {
+      const isLight = theme === "light";
+      document.documentElement.setAttribute("data-theme", theme);
+
+      const label = isLight ? "Switch to dark mode" : "Switch to light mode";
+      themeToggle.setAttribute("aria-label", label);
+      themeToggle.setAttribute("title", label);
+
+      try {
+        localStorage.setItem(THEME_KEY, theme);
+      } catch (e) {
+        // Ignore storage failures; the theme still applies for this session.
+      }
+    }
+
+    themeToggle.addEventListener("click", function () {
+      applyTheme(getTheme() === "light" ? "dark" : "light");
+    });
+
+    // Sync the button label/icon with the theme applied in the head.
+    applyTheme(getTheme());
+
+    function loadFontSize() {
+      try {
+        const saved = parseInt(localStorage.getItem(FONT_SIZE_KEY), 10);
+        if (!isNaN(saved)) {
+          return Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, saved));
+        }
+      } catch (e) {
+        // Ignore storage failures and fall back to the default size.
+      }
+      return DEFAULT_FONT_SIZE;
+    }
+
+    let currentFontSize = loadFontSize();
+
+    function applyFontSize(size, persist) {
+      currentFontSize = Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, size));
+
+      document.documentElement.style.fontSize = currentFontSize + "px";
+      fontDecrease.disabled = currentFontSize <= MIN_FONT_SIZE;
+      fontIncrease.disabled = currentFontSize >= MAX_FONT_SIZE;
+
+      if (persist) {
+        try {
+          localStorage.setItem(FONT_SIZE_KEY, String(currentFontSize));
+        } catch (e) {
+          // Ignore storage failures; the size still applies for this session.
+        }
+      }
+    }
+
+    fontDecrease.addEventListener("click", function () {
+      applyFontSize(currentFontSize - FONT_SIZE_STEP, true);
+    });
+
+    fontIncrease.addEventListener("click", function () {
+      applyFontSize(currentFontSize + FONT_SIZE_STEP, true);
+    });
+
+    // Sync the buttons with the size applied in the head.
+    applyFontSize(currentFontSize, false);
+
+    function applyView(view) {
+      currentView = view;
+      document.getElementById("task-list").setAttribute("data-view", view);
+      document.getElementById("view-cards").setAttribute("aria-pressed", String(view === "cards"));
+      document.getElementById("view-list").setAttribute("aria-pressed", String(view === "list"));
+      renderTasks();
+      try {
+        localStorage.setItem(VIEW_KEY, view);
+      } catch (e) {
+        // The view still applies for this session.
+      }
+    }
+
+    document.getElementById("view-cards").addEventListener("click", function () { applyView("cards"); });
+    document.getElementById("view-list").addEventListener("click", function () { applyView("list"); });
+
+    const WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+    function parseDeadlineFromText(text) {
+      if (!text) return null;
+      const str = String(text).toLowerCase();
+      // Look for patterns like "finish on/by thursday", "due thursday", etc.
+      const match = str.match(/(?:finish|due|by|deadline)[^\w]*(monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i);
+      if (match) {
+        return match[1].toLowerCase();
+      }
+      // Also look for standalone weekday if it's near "finish" context
+      return null;
+    }
+
+    function getNextWeekdayDate(weekdayName, fromDate) {
+      const targetDay = WEEKDAYS.indexOf(weekdayName.toLowerCase());
+      if (targetDay === -1) return null;
+      const date = new Date(fromDate);
+      date.setHours(0, 0, 0, 0);
+      const currentDay = date.getDay();
+      let diff = targetDay - currentDay;
+      if (diff < 0) diff += 7;
+      // If diff is 0, use today (nearest weekday)
+      date.setDate(date.getDate() + diff);
+      return date;
+    }
+
+    function formatDateISO(date) {
+      if (!date) return "";
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return year + "-" + month + "-" + day;
+    }
+
+    function formatDateDisplay(dateStr) {
+      if (!dateStr) return "";
+      const parsed = new Date(dateStr + "T00:00:00");
+      if (Number.isNaN(parsed.getTime())) return dateStr;
+      return parsed.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Supports both plain strings and detailed task objects.
+    function normalizeTask(task) {
+      if (typeof task === "string") return { text: task };
+      if (!task || typeof task !== "object") return { text: "" };
+
+      let deadline = task.deadline || task.dueDate || task.due || "";
+
+      // Try to parse from finish or notes if no explicit deadline
+      if (!deadline) {
+        const fromFinish = parseDeadlineFromText(task.finish);
+        if (fromFinish) {
+          const date = getNextWeekdayDate(fromFinish, new Date());
+          deadline = formatDateISO(date);
+        } else {
+          const fromNotes = parseDeadlineFromText(task.notes);
+          if (fromNotes) {
+            const date = getNextWeekdayDate(fromNotes, new Date());
+            deadline = formatDateISO(date);
+          }
+        }
+      }
+
+      // Avoid newer syntax (such as ??) so older Android WebViews keep working.
+      return {
+        text: task.text || task.title || "",
+        expected: task.expected || "",
+        start: task.start || "",
+        finish: task.finish || "",
+        notes: task.notes || "",
+        deadline: deadline
+      };
+    }
+
+    function formatTime(value) {
+      if (value === undefined || value === null || value === "") return "";
+
+      const str = String(value).trim();
+
+      // "HH:MM" is interpreted as a time today.
+      const match = str.match(/^(\d{1,2}):(\d{2})$/);
+      if (match) {
+        const date = new Date();
+        date.setHours(Number(match[1]), Number(match[2]), 0, 0);
+        return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      }
+
+      const parsed = new Date(str);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      }
+
+      return str;
+    }
+
+    function formatExpected(value) {
+      if (value === undefined || value === null || value === "") return "";
+      if (typeof value === "number") return `${value} min`;
+      return String(value);
+    }
+
+    function createMetaItem(label, value) {
+      const item = document.createElement("span");
+      item.className = "task-meta-item";
+
+      const labelEl = document.createElement("span");
+      labelEl.className = "meta-label";
+      labelEl.textContent = label;
+
+      const valueEl = document.createElement("span");
+      valueEl.className = "meta-value";
+      valueEl.textContent = value;
+
+      item.appendChild(labelEl);
+      item.appendChild(valueEl);
+      return item;
+    }
+
+    function createTaskElement(rawTask, index) {
+      const task = normalizeTask(rawTask);
+      const taskKey = JSON.stringify([index, task.text]);
+
+      const li = document.createElement("li");
+      li.className = "task-item";
+
+      const dot = document.createElement("span");
+      dot.className = "task-bullet";
+      dot.setAttribute("aria-hidden", "true");
+
+      const content = document.createElement("div");
+      content.className = "task-content";
+
+      const title = document.createElement("span");
+      title.className = "task-title";
+      title.textContent = task.text;
+      content.appendChild(title);
+
+      const details = document.createElement("div");
+      details.className = "task-details";
+      details.id = "task-details-" + index;
+
+      const expected = formatExpected(task.expected);
+      const start = formatTime(task.start);
+      const finish = formatTime(task.finish);
+      const deadline = task.deadline;
+
+      if (deadline || expected || start || finish) {
+        const meta = document.createElement("div");
+        meta.className = "task-meta";
+
+        if (deadline) meta.appendChild(createMetaItem("Deadline", formatDateDisplay(deadline)));
+        if (expected) meta.appendChild(createMetaItem("Expected", expected));
+        if (start) meta.appendChild(createMetaItem("Start", start));
+        if (finish) meta.appendChild(createMetaItem("Finish", finish));
+
+        details.appendChild(meta);
+      }
+
+      if (task.notes) {
+        const notes = document.createElement("div");
+        notes.className = "task-notes";
+        notes.textContent = task.notes;
+        details.appendChild(notes);
+      }
+
+      if (currentView === "list") {
+        const summary = document.createElement("button");
+        summary.type = "button";
+        summary.className = "task-summary";
+        summary.setAttribute("aria-controls", details.id);
+        summary.setAttribute("aria-expanded", String(expandedTasks.has(taskKey)));
+        details.hidden = !expandedTasks.has(taskKey);
+        summary.appendChild(dot);
+        summary.appendChild(title);
+        const chevron = document.createElement("span");
+        chevron.className = "task-chevron";
+        chevron.setAttribute("aria-hidden", "true");
+        summary.appendChild(chevron);
+        summary.addEventListener("click", function () {
+          const expanded = summary.getAttribute("aria-expanded") !== "true";
+          summary.setAttribute("aria-expanded", String(expanded));
+          details.hidden = !expanded;
+          if (expanded) expandedTasks.add(taskKey);
+          else expandedTasks.delete(taskKey);
+        });
+        if (!details.hasChildNodes()) {
+          const empty = document.createElement("p");
+          empty.className = "task-notes";
+          empty.textContent = "No additional details for this task.";
+          details.appendChild(empty);
+        }
+        li.appendChild(summary);
+        li.appendChild(details);
+      } else {
+        if (details.hasChildNodes()) content.appendChild(details);
+        li.appendChild(dot);
+        li.appendChild(content);
+      }
+      return li;
+    }
+
+    function renderTasks() {
+      const listEl = document.getElementById("task-list");
+      listEl.innerHTML = "";
+      const tasksWithIndex = loadedTasks.map(function (task, index) {
+        return { task: task, index: index, normalized: normalizeTask(task) };
+      });
+      tasksWithIndex.sort(function (a, b) {
+        const aHasDeadline = !!(a.normalized.deadline);
+        const bHasDeadline = !!(b.normalized.deadline);
+        if (aHasDeadline && !bHasDeadline) return -1;
+        if (!aHasDeadline && bHasDeadline) return 1;
+        if (aHasDeadline && bHasDeadline) {
+          if (a.normalized.deadline < b.normalized.deadline) return -1;
+          if (a.normalized.deadline > b.normalized.deadline) return 1;
+          return 0;
+        }
+        return a.index - b.index;
+      });
+      tasksWithIndex.forEach(function (item) {
+        listEl.appendChild(createTaskElement(item.task, item.index));
+      });
+    }
+
+    applyView(currentView);
+
+    async function fetchTasks() {
+      const statusEl = document.getElementById("last-updated");
+
+      try {
+        // Appending timestamp disables browser cache on Android 7 WebView
+        const response = await fetch(`tasks.json?_t=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const tasks = await response.json();
+
+        const taskData = JSON.stringify(tasks);
+        if (taskData !== lastTaskData) {
+          loadedTasks = tasks;
+          renderTasks();
+          lastTaskData = taskData;
+        }
+
+        const now = new Date();
+        statusEl.textContent = `Updated ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      } catch (err) {
+        console.error("Dashboard update failed:", err);
+
+        if (location.protocol === "file:") {
+          console.error(
+            "Opening index.html directly does not work because browsers block loading local JSON files. " +
+            "Run ./serve.sh and open http://localhost:8000 instead."
+          );
+          statusEl.textContent = "Local preview: run ./serve.sh";
+        } else {
+          statusEl.textContent = "Syncing...";
+        }
+      }
+    }
+
+    fetchTasks();
+    setInterval(fetchTasks, REFRESH_INTERVAL_MS);
+  </script>
+</body>
+</html>
