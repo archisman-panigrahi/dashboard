@@ -4,7 +4,7 @@ Always on todo list dashboard for tablet in kiosk mode. Made with OpenCode and C
 
 ## Setup
 1. Fork this github repo.
-2. Edit `tasks.json' (see below) and push this repository to GitHub.
+2. Edit `tasks.json` ([see below](#task-format)) and push this repository to GitHub.
 3. In the repository settings, go to **Settings > Pages**.
 4. Under **Build and deployment**, set **Source** to `Deploy from a branch`.
 5. Select `main` branch and `/ (root)`, then click **Save**.
@@ -19,8 +19,8 @@ Opening `index.html` directly from your file manager will not work: browsers blo
 
 Then open <http://localhost:8000>. To use a different port, pass it as the first argument, for example `./serve-locally.sh 8080`.
 
-## How do I display this in a tablet in kiosk mode?
-- Open the GitHub Pages URL in Fully Kiosk Browser on the tablet.
+## How do I display this in a tablet/phone in kiosk mode?
+- Open the GitHub Pages URL in a Kiosk Browser ([Play Store](https://play.google.com/store/apps/details?id=com.nktnet.webview_kiosk), [F-Droid](https://f-droid.org/en/packages/uk.nktnet.webviewkiosk/)) on the tablet.
 - Enable fullscreen mode and screen keep-alive while on power.
 - Use the sun/moon button in the header to switch between light and dark mode. The choice is saved on the device.
 - Use the `A−` / `A+` buttons in the header to make the text smaller or larger. The chosen text size is saved on the device.
