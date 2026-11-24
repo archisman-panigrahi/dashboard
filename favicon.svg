@@ -1,16 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>Smiling todo clipboard</title>
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="#388bfd"/>
-  <rect x="15" y="13" width="34" height="43" rx="7" fill="#eef6ff"/>
-  <rect x="24" y="9" width="16" height="10" rx="4" fill="#123a70"/>
-  <g fill="#123a70">
-    <circle cx="25" cy="31" r="2.5"/>
-    <circle cx="39" cy="31" r="2.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <rect width="48" height="48" rx="8" fill="#388BFD"/>
+  <g fill="#FFFFFF">
+    <rect x="10" y="12" width="28" height="4"/>
+    <rect x="10" y="22" width="28" height="4"/>
+    <rect x="10" y="32" width="21" height="4"/>
   </g>
-  <g fill="#ffb3c7">
-    <ellipse cx="21" cy="37" rx="3.5" ry="2"/>
-    <ellipse cx="43" cy="37" rx="3.5" ry="2"/>
-  </g>
-  <path d="M27 38q5 6 10 0" fill="none" stroke="#123a70" stroke-width="3" stroke-linecap="round"/>
-  <path d="m26 48 4 4 8-8" fill="none" stroke="#388bfd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
