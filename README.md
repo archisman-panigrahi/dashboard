@@ -8,7 +8,9 @@ Always on todo list dashboard for tablet in kiosk mode. Made with OpenCode and C
 3. In the repository settings, go to **Settings > Pages**.
 4. Under **Build and deployment**, set **Source** to `Deploy from a branch`.
 5. Select `main` branch and `/ (root)`, then click **Save**.
-6. Access the deployed site at `https://<username>.github.io/<repository-name>/`.
+6. Access the deployed site at `https://<username>.github.io/<repository-name>/`. Example: https://archisman-panigrahi.github.io/dashboard/
+
+**Note**: The site will auto-refresh in the device where you view it. To update entries, just edit `tasks.json` and push to GitHub.
 
 ## Local Preview
 Opening `index.html` directly from your file manager will not work: browsers block `fetch()` requests to local `file://` URLs, so the task list stays empty. Serve the folder over HTTP instead:
