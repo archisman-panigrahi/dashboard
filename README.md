@@ -1,6 +1,7 @@
 # Tablet Display Dashboard
 
 Always on todo list dashboard for tablet in kiosk mode. Made with OpenCode and Codex.
+A companion android app is avialable at https://github.com/archisman-panigrahi/dashboard-android.
 
 ## Setup
 1. Fork this github repo.
