@@ -3,11 +3,12 @@
 Always on todo list dashboard for tablet in kiosk mode. Made with OpenCode and Codex.
 
 ## Setup
-1. Push this repository to GitHub.
-2. In the repository settings, go to **Settings > Pages**.
-3. Under **Build and deployment**, set **Source** to `Deploy from a branch`.
-4. Select `main` branch and `/ (root)`, then click **Save**.
-5. Access the deployed site at `https://<username>.github.io/<repository-name>/`.
+1. Fork this github repo.
+2. Edit `tasks.json' (see below) and push this repository to GitHub.
+3. In the repository settings, go to **Settings > Pages**.
+4. Under **Build and deployment**, set **Source** to `Deploy from a branch`.
+5. Select `main` branch and `/ (root)`, then click **Save**.
+6. Access the deployed site at `https://<username>.github.io/<repository-name>/`.
 
 ## Local Preview
 Opening `index.html` directly from your file manager will not work: browsers block `fetch()` requests to local `file://` URLs, so the task list stays empty. Serve the folder over HTTP instead:
@@ -18,7 +19,7 @@ Opening `index.html` directly from your file manager will not work: browsers blo
 
 Then open <http://localhost:8000>. To use a different port, pass it as the first argument, for example `./serve-locally.sh 8080`.
 
-## Tablet Setup
+## How do I display this in a tablet in kiosk mode?
 - Open the GitHub Pages URL in Fully Kiosk Browser on the tablet.
 - Enable fullscreen mode and screen keep-alive while on power.
 - Use the sun/moon button in the header to switch between light and dark mode. The choice is saved on the device.
